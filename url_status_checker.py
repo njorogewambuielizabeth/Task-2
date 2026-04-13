@@ -1,5 +1,6 @@
 import csv
 import requests
+import sys
 
 def check_url_status(file_path):
     """
@@ -24,21 +25,17 @@ def check_url_status(file_path):
                 
                 try:
                     # Send a HEAD request for efficiency
-                    # Some servers might block HEAD, so we can fall back to GET if needed,
-                    # but for this task, HEAD is usually preferred for status checks.
                     # We add a timeout to prevent hanging.
                     response = requests.head(url, timeout=10, allow_redirects=True)
                     print(f"({response.status_code}) {url}")
                 except requests.exceptions.RequestException as e:
-                    # In case of connection errors or timeouts
-                    print(f"(Error) {url}")
+                    # Improved: Print specific exception name
+                    print(f"(Error: {type(e).__name__}) {url}")
 
     except FileNotFoundError:
         print(f"Error: File '{file_path}' not found.")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
-
-import sys
 
 if __name__ == "__main__":
     # Path to the input CSV file can be passed as an argument
